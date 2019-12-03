@@ -2,6 +2,7 @@ import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.svm import SVC
 from sklearn.model_selection import train_test_split
+from joblib import dump
 
 input_train = pd.read_csv('../data/input_train.csv')
 X = input_train['question'].values
@@ -18,3 +19,7 @@ X_test = vectorizer.transform(X_test)
 # TODO : change default parameters of SVC
 clf = SVC()
 clf.fit(X_train, y_train)
+
+filename = 'SVC.joblib'
+
+dump(clf, filename)

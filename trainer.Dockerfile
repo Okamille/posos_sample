@@ -1,7 +1,9 @@
 # Use the official docker image for python3.7
-FROM python:3.7
+FROM tensorflow/tensorflow:latest-py3
 
-# Installing packages
+RUN pip install --upgrade pip
+RUN pip install --user sklearn
+RUN pip install --user pandas
+RUN pip install --user keras
 
-RUN pip3 install --user sklearn
-RUN pip3 install --user numpy
+CMD ["python", "${PWD}/training/neural_train.py"]

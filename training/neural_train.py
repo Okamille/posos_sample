@@ -10,7 +10,7 @@ import os
 
 
 # Dataset loading
-input_train = pd.read_csv('../data/input_train.csv')
+input_train = pd.read_csv('/app/data/input_train.csv')
 X_text = input_train['question'].values
 
 tokenizer = Tokenizer()
@@ -23,7 +23,7 @@ for document in X_text:
     seq = text_to_word_sequence(document)
     X.append([tokenizer.word_index[word] for word in seq])
 
-output_train = pd.read_csv('../data/output_train.csv')
+output_train = pd.read_csv('/app/data/output_train.csv')
 y = output_train['intention'].values
 
 num_classes = len(np.unique(y))
@@ -66,19 +66,21 @@ model.fit(X_train, y_train,
           validation_data=(X_test, y_test))
 
 model_name = '1'
-
-MODEL_DIR = '../models/%s' % model_name
+MODEL_DIR = '/app/models/%s' % model_name
+"""
 if os.path.isdir(MODEL_DIR):
   print('\nAlready saved a model, cleaning up\n')
-  !rm -r {export_path}
+  os.system('rm -r %s' % MODEL_DIR)
 
-tf.saved_model.simple_save(
+tf.saved_model.save(
     keras.backend.get_session(),
     MODEL_DIR,
     inputs={'input_image': model.input},
     outputs={t.name:t for t in model.outputs})
 
 print('\nSaved model:')
-!ls -l {MODEL_DIR}
 
-!saved_model_cli show --dir {MODEL_DIR} --all
+os.system('saved_model_cli show --dir %s --all' % MODEL_DIR)
+"""
+
+model.save(os.path.join(MODEL_DIR, '%s.h5' % model_name))
